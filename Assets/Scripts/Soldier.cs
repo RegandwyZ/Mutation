@@ -1,87 +1,82 @@
-using System;
-using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Soldier : Character, IAnimation, IAttackable, IWeapon
 {
-   
     private NavMeshAgent _agent;
-    private SetPlayersColor _setPlayersColor;
+   
     public Animator Anim { get; set; }
-    
+
     public bool IsSelected { get; set; }
 
     [SerializeField] private Collider _unitCollider;
-    [SerializeField] private Collider _weaponCollider; 
-    [SerializeField] private float _hp; 
-    [SerializeField] private float _attackRate;
+    [SerializeField] private Collider _weaponCollider;
+    [SerializeField] private float _hp;
     [SerializeField] private float _moveSpeed;
-   
-    [SerializeField] private Players _playerColor;
+    [SerializeField] private Players _playersColor;
+    private AreaOfEnemy _areaOfEnemy;
+    private Collider _enemyCollider;
 
-    private bool _isDead;
-   
-   private static readonly int IsRun = Animator.StringToHash("IsRun");
-   private static readonly int IsAttack = Animator.StringToHash("IsAttack");
-   private bool _isAttacking;
-   private Character _targetPos;
-   
-   public void Attack(Character targetPos)
-   {
-      
-       var range = new Vector3(-1, 0, 0);
-       var position = targetPos;
-       Move(position.transform.position - range);
+    private static readonly int IsRun = Animator.StringToHash("IsRun");
+    private static readonly int IsAttack = Animator.StringToHash("IsAttack");
+    
+    
 
-        var distance = Vector3.Distance(transform.position, position.transform.position);
-        _targetPos = position;
-       
-       switch (distance)
-       {
-           case < 2:
-               _isAttacking = true;
-               transform.LookAt(targetPos.transform);
-               Stop();
-               Anim.SetBool(IsAttack, true);
-               _agent.isStopped = true;
-             
-               break;
-           case > 2:
-               _isAttacking = false;
-               Anim.SetBool(IsAttack, false);
-               _agent.isStopped = false;
-               Move(position.transform.position);
-               break;
-       }
-   }
-
-   public override void Initialize(Players playerColor)
-   {
-       _playerColor = playerColor;
-   }
-
-   
-
-
-   private void Awake()
-   {
-       Physics.IgnoreCollision(_weaponCollider, _unitCollider);
+    private void Awake()
+    {
+        _areaOfEnemy = GetComponent<AreaOfEnemy>();
+        Physics.IgnoreCollision(_weaponCollider, _unitCollider);
         _agent = GetComponent<NavMeshAgent>();
         Anim = GetComponent<Animator>();
-        _setPlayersColor = FindObjectOfType<SetPlayersColor>();
-        _setPlayersColor.ChangeMaterialsInChildren(this.transform, _playerColor);
+    }
+
+    private void Start()
+    {
         
     }
 
+    public void Attack(Collider targetPos)
+    {
+        _enemyCollider = targetPos;
+        var range = new Vector3(-1, 0, 0);
+        var positionEnemy = targetPos.transform.position;
+        var distance = Vector3.Distance(transform.position, positionEnemy);
 
+        
+        Move(positionEnemy - range);
+        if (targetPos == null)
+            Stop();
+        
+        switch (distance)
+        {
+            case < 2:
+                transform.LookAt(targetPos.transform);
+                _agent.isStopped = true;
+                Anim.SetBool(IsRun, false);
+                Anim.SetBool(IsAttack, true);
+                break;
+        
+            case > 2:
+                Anim.SetBool(IsRun, true);
+                Anim.SetBool(IsAttack, false);
+                _agent.enabled = true; 
+                _agent.isStopped = false;
+                Move(targetPos.transform.position);
+                break;
+        }
+    }
+
+    
     public override void Move(Vector3 targetPos)
     {
+        if (!_agent.enabled) return;
+        if (_agent == null) return;
+        
         Anim.SetBool(IsAttack, false);
         Anim.SetBool(IsRun, true);
         _agent.speed = _moveSpeed;
         _agent.SetDestination(targetPos);
-        
+
     }
 
     protected override void Stop()
@@ -90,34 +85,46 @@ public class Soldier : Character, IAnimation, IAttackable, IWeapon
         Anim.SetBool(IsRun, false);
         Anim.SetBool(IsAttack, false);
         _agent.isStopped = false;
-       
+        
     }
-
-   
     
+
     private void Update()
     {
+        if (_agent == null) return;
         if (_hp <= 0)
         {
             Destroy(gameObject);
-            _isDead = true;
-        }
-            
-        if(_agent.remainingDistance < 3.5)
-            Stop();
-        if (_targetPos != null)
-        {
-            Attack(_targetPos);
+            return;
         }
 
-        if (_targetPos == null)
+        if (_agent.enabled)
+        {
+            if (_agent.remainingDistance < 1.5)
+                Stop();
+        }
+       
+
+        if (_enemyCollider)
+        {
+            _enemyCollider = _areaOfEnemy.FindClosestEnemy();
+            Attack(_enemyCollider);
+        }
+        else
+        {
+            _enemyCollider = _areaOfEnemy.FindClosestEnemy();
+        }
+
+        if (_enemyCollider == null)
         {
             Stop();
         }
-        
         
        
     }
+    
+    
+    
 
     private void TakeDamage(float damage)
     {
@@ -126,15 +133,15 @@ public class Soldier : Character, IAnimation, IAttackable, IWeapon
 
     private void OnTriggerEnter(Collider other)
     {
-        
         var sol = other.gameObject.GetComponent<Sword>();
-       
-        if (sol != null)
+
+        if (sol == null || _playersColor == sol._playerColor) return;
+        if (Anim.GetBool(IsAttack))
         {
-           TakeDamage(10);
-           
-           
+            TakeDamage(10);
         }
-       
     }
+    
+   
+    
 }

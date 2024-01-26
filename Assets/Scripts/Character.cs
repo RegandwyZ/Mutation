@@ -10,9 +10,7 @@ public abstract class Character : MonoBehaviour
     protected abstract void Stop();
 
    
-
-    public abstract void Initialize(Players playerColor);
-
+    
     
 
 }

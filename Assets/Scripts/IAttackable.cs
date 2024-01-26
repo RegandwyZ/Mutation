@@ -4,7 +4,7 @@
 
  public interface IAttackable
  {
-     public void Attack(Character targetPos);
+     public void Attack(Collider targetPos);
      
      
  }
