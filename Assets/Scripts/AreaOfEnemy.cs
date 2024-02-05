@@ -7,11 +7,9 @@
      
      private Collider[] _result;
      
-    
-     
-     private void Start()
+     private void Awake()
      {
-         _result = new Collider[25];
+         _result = new Collider[75];
      }
 
 

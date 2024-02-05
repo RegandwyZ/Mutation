@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using UnityEngine;
 
 public class RangeWeapon : MonoBehaviour
@@ -7,11 +7,12 @@ public class RangeWeapon : MonoBehaviour
      
      private Rigidbody _rigidbody;
      private Collider _target;
-
+     private Players _color;
      
-     public void Init()
+     public void Init(Players playerColor)
      {
           _rigidbody = GetComponent<Rigidbody>();
+          _color = playerColor;
      }
 
      public void SetTarget(Collider newTarget)
@@ -33,6 +34,12 @@ public class RangeWeapon : MonoBehaviour
           
      }
     
-     
+     private void OnTriggerEnter(Collider other)
+     {
+          var sol = other.gameObject.GetComponent<Character>();
+          if (sol == null || _color == sol.GetColor) return;
+          sol.TakeDamage(10);
+          Destroy(gameObject);
+     }
 
 }

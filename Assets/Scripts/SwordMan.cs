@@ -1,12 +1,9 @@
+﻿using System;
 
-public class Soldier : MeleeUnit
+public class SwordMan : MeleeUnit
 {
-    
     private void Update()
     {
         UnitBehaviour();
     }
-    
-    
-    
 }

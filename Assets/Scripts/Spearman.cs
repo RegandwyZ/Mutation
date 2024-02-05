@@ -1,30 +1,12 @@
-﻿using UnityEngine;
-using UnityEngine.AI;
-
-public class Spearman : Character, IMeleeAttackable, IWeapon, IAnimation
+﻿
+public class Spearman : MeleeUnit
 {
     
     private void Update()
     {
-        MeleeUpdated();
+        UnitBehaviour();
     }
+
     
-    
-    private void TakeDamage(float damage)
-    {
-        _hp -= damage;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        var sol = other.gameObject.GetComponent<Weapon>();
-
-        if (sol == null || _playersColor == sol._playerColor) return;
-        if (Anim.GetBool(IsAttack))
-        {
-            TakeDamage(10);
-        }
-    }
-
    
 }
