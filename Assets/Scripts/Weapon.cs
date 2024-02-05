@@ -1,6 +1,6 @@
 ﻿ using UnityEngine;
 
- public class Sword: MonoBehaviour
+ public class Weapon: MonoBehaviour
  {
      [SerializeField] private Transform _sword;
      [SerializeField] public Players _playerColor;
