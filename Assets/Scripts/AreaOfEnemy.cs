@@ -9,7 +9,7 @@
      
      private void Awake()
      {
-         _result = new Collider[75];
+         _result = new Collider[200];
      }
 
 

@@ -9,19 +9,26 @@ public abstract class Character : MonoBehaviour
     [SerializeField] protected float _health;
     [SerializeField] protected float _moveSpeed;
     [SerializeField] protected float _attackRange;
-    
+
     protected NavMeshAgent Agent;
     protected Collider EnemyCollider;
-    private AreaOfEnemy _areaOfEnemy;
-    private Animator _animator;
     protected AnimationParameter AnimationPar;
     
+    private AreaOfEnemy _areaOfEnemy;
+    private Animator _animator;
+    
     protected abstract void Attack(Collider targetPos, float moveSpeed, float attackRange);
-    
+
     protected void Stop() => Agent.isStopped = true;
-    
-    protected void DestroyGameObject() => Destroy(gameObject);
-    
+
+    private void DestroyGameObject()
+    {
+        Destroy(_weaponCollider);
+        Destroy(_unitCollider);
+        Destroy(Agent);
+        Destroy(gameObject);
+    }
+
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -33,32 +40,28 @@ public abstract class Character : MonoBehaviour
     }
 
     public Players GetColor => _playersColor;
+
     protected void UnitBehaviour()
     {
         if (Agent == null) return;
         if (_health <= 0)
         {
-            Destroy(_weaponCollider);
-            Destroy(_unitCollider);
-            Destroy(Agent);
+            DestroyGameObject();
             AnimationPar.PlayAnimation(AnimationType.Die);
-           // Invoke(nameof(DestroyGameObject), 5f);
             return;
         }
-        
+
         if (Agent.remainingDistance < 1.5)
             Stop();
-        
         if (EnemyCollider)
             Attack(EnemyCollider, _moveSpeed, _attackRange);
         else
             EnemyCollider = _areaOfEnemy.FindClosestEnemy();
-
         if (EnemyCollider != null) return;
         Stop();
         AnimationPar.PlayAnimation(AnimationType.Idle);
     }
-    
+
 
     protected virtual void Move(Vector3 targetPos, float moveSpeed)
     {
@@ -67,7 +70,7 @@ public abstract class Character : MonoBehaviour
         Agent.speed = moveSpeed;
         Agent.SetDestination(targetPos);
     }
-    
+
     public void TakeDamage(float damage)
     {
         _health -= damage;
@@ -79,5 +82,4 @@ public abstract class Character : MonoBehaviour
         if (sol == null || _playersColor == sol._playerColor) return;
         TakeDamage(10);
     }
-  
 }
