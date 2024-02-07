@@ -3,7 +3,7 @@
 public abstract class MeleeUnit : Character
 {
 
-    protected override void Attack(Collider targetPos, float moveSpeed, float attackRange)
+    protected override void Attack(Collider targetPos,  float attackRange)
     {
         AnimationPar.PlayAnimation(AnimationType.Run);
         EnemyCollider = targetPos;
@@ -11,7 +11,7 @@ public abstract class MeleeUnit : Character
         var positionEnemy = targetPos.transform.position;
         var distance = Vector3.Distance(transform.position, positionEnemy);
        
-        Move(positionEnemy - range, moveSpeed);
+        Move(positionEnemy - range);
         if (targetPos == null)
         {
             AnimationPar.PlayAnimation(AnimationType.Idle);
@@ -30,7 +30,7 @@ public abstract class MeleeUnit : Character
                 Agent.enabled = true; 
                 Agent.isStopped = false;
                 AnimationPar.PlayAnimation(AnimationType.Run);
-                Move(targetPos.transform.position, moveSpeed);
+                Move(targetPos.transform.position);
             }
         }
     }

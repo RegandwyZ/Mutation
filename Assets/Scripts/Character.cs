@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+
 public abstract class Character : MonoBehaviour
 {
     [SerializeField] protected Collider _unitCollider;
@@ -9,23 +10,37 @@ public abstract class Character : MonoBehaviour
     [SerializeField] protected float _health;
     [SerializeField] protected float _moveSpeed;
     [SerializeField] protected float _attackRange;
-
+    
     protected NavMeshAgent Agent;
     protected Collider EnemyCollider;
     protected AnimationParameter AnimationPar;
     
     private AreaOfEnemy _areaOfEnemy;
     private Animator _animator;
-    
-    protected abstract void Attack(Collider targetPos, float moveSpeed, float attackRange);
+    public Players GetColor => _playersColor;
 
-    protected void Stop() => Agent.isStopped = true;
+    public bool IsSelected { get; private set; }
+    
+    protected abstract void Attack(Collider targetPos, float attackRange);
+
+    public void SelectUnit()
+    {
+        IsSelected = true;
+    }
+    
+    public void DeSelectUnit()
+    {
+        IsSelected = false;
+    }
+    
+    protected void Stop()
+    {
+        Agent.isStopped = true;
+        AnimationPar.PlayAnimation(AnimationType.Idle);
+    }
 
     private void DestroyGameObject()
     {
-        Destroy(_weaponCollider);
-        Destroy(_unitCollider);
-        Destroy(Agent);
         Destroy(gameObject);
     }
 
@@ -38,8 +53,6 @@ public abstract class Character : MonoBehaviour
         Physics.IgnoreCollision(_weaponCollider, _unitCollider);
         Agent = GetComponent<NavMeshAgent>();
     }
-
-    public Players GetColor => _playersColor;
 
     protected void UnitBehaviour()
     {
@@ -54,20 +67,26 @@ public abstract class Character : MonoBehaviour
         if (Agent.remainingDistance < 1.5)
             Stop();
         if (EnemyCollider)
-            Attack(EnemyCollider, _moveSpeed, _attackRange);
+            Attack(EnemyCollider, _attackRange);
         else
+        {
+            _areaOfEnemy.DetectEnemyInRadius();
             EnemyCollider = _areaOfEnemy.FindClosestEnemy();
+        }
+           
         if (EnemyCollider != null) return;
-        Stop();
-        AnimationPar.PlayAnimation(AnimationType.Idle);
+        // Stop();
+        // AnimationPar.PlayAnimation(AnimationType.Idle);
+       
     }
 
 
-    protected virtual void Move(Vector3 targetPos, float moveSpeed)
+    public virtual void Move(Vector3 targetPos)
     {
         if (!Agent.enabled) return;
         if (Agent == null) return;
-        Agent.speed = moveSpeed;
+        Agent.isStopped = false;
+        AnimationPar.PlayAnimation(AnimationType.Run);
         Agent.SetDestination(targetPos);
     }
 

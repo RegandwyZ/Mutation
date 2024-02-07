@@ -16,8 +16,7 @@ public abstract class RangeUnit : Character
     }
 
     
-
-    protected override void Attack(Collider targetPos, float moveSpeed, float attackRange)
+    protected override void Attack(Collider targetPos,  float attackRange)
     {
         if (EnemyCollider == null) return;
         AnimationPar.PlayAnimation(AnimationType.Run);
@@ -25,7 +24,7 @@ public abstract class RangeUnit : Character
         var range = new Vector3(-attackRange, 0, 0);
         var positionEnemy = targetPos.transform.position;
         var distance = Vector3.Distance(transform.position, positionEnemy);
-        Move(positionEnemy - range, moveSpeed);
+        Move(positionEnemy - range);
         if (targetPos == null)
         {
             Stop();
@@ -44,7 +43,7 @@ public abstract class RangeUnit : Character
                 Agent.enabled = true;
                 Agent.isStopped = false;
                 AnimationPar.PlayAnimation(AnimationType.Run);
-                Move(targetPos.transform.position, moveSpeed);
+                Move(targetPos.transform.position);
             }
         }
     }

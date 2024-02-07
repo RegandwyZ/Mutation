@@ -1,56 +1,45 @@
 ﻿using UnityEngine;
 
- public class AreaOfEnemy: MonoBehaviour
- {
-     [SerializeField] private float _rangeArea;
-     [SerializeField] private LayerMask _detectionLayer;
-     
-     private Collider[] _result;
-     
-     private void Awake()
-     {
-         _result = new Collider[200];
-     }
+public class AreaOfEnemy : MonoBehaviour
+{
+    private float _rangeArea = 100;
+    [SerializeField] private LayerMask _detectionLayer;
+
+    private Collider[] _result;
+
+    private void Awake()
+    {
+        _result = new Collider[10];
+    }
+    
+    
+    public void DetectEnemyInRadius()
+    {
+        _result = Physics.OverlapSphere(transform.position, _rangeArea, _detectionLayer);
+    }
 
 
-     private void DetectEnemyInRadius()
-     {
-         Physics.OverlapSphereNonAlloc(transform.position, _rangeArea, _result, _detectionLayer);
-     }
+    public Collider FindClosestEnemy()
+    {
+        Collider closestEnemy = null;
+        
+        var minDistance = float.MaxValue;
+        var playerPosition = transform.position;
 
+        foreach (var enemy in _result)
+        {
+            if (enemy == null || enemy.gameObject == gameObject) continue;
 
-     private void Update()
-     {
-         DetectEnemyInRadius();
-         FindClosestEnemy();
-     }
+            var enemyPosition = enemy.transform.position;
+            var distance = Vector3.Distance(playerPosition, enemyPosition);
 
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestEnemy = enemy;
+            }
+        }
 
-     public Collider FindClosestEnemy()
-     {
-         Collider closestEnemy = null;
-         var minDistance = float.MaxValue;
-
-         var playerPosition = transform.position;
-
-         foreach (var enemy in _result) 
-         {
-             if (enemy == null || enemy.gameObject == gameObject) continue; 
-
-             var enemyPosition = enemy.transform.position;
-             var distance = Vector3.Distance(playerPosition, enemyPosition);
-
-             if (distance < minDistance)
-             {
-                 minDistance = distance;
-                 closestEnemy = enemy;
-             }
-         }
-
-         return closestEnemy;
-     }
- }
-     
-     
- 
- 
+        return closestEnemy;
+    }
+}
