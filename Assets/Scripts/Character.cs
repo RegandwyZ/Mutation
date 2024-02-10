@@ -73,11 +73,13 @@ public abstract class Character : MonoBehaviour
             _areaOfEnemy.DetectEnemyInRadius();
             EnemyCollider = _areaOfEnemy.FindClosestEnemy();
         }
-           
+
         if (EnemyCollider != null) return;
-        // Stop();
-        // AnimationPar.PlayAnimation(AnimationType.Idle);
-       
+        Stop();
+        Agent.avoidancePriority = 50;
+
+
+
     }
 
 

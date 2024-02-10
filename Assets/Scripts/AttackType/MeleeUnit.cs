@@ -24,11 +24,13 @@ public abstract class MeleeUnit : Character
                 transform.LookAt(targetPos.transform);
                 AnimationPar.PlayAnimation(AnimationType.Attack);
                 Agent.isStopped = true;
+                Agent.avoidancePriority = 1;
             }
             else if (distance > attackRange )
             {
                 Agent.enabled = true; 
                 Agent.isStopped = false;
+                Agent.avoidancePriority = 50;
                 AnimationPar.PlayAnimation(AnimationType.Run);
                 Move(targetPos.transform.position);
             }
