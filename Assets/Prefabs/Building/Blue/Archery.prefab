@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 8562686403694146217}
   - component: {fileID: 6659245986029554108}
   - component: {fileID: 3436363563087833748}
+  - component: {fileID: 2278767987646810436}
   m_Layer: 0
   m_Name: Archery
   m_TagString: Untagged
@@ -128,5 +129,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed7718ddbc8ded748ab93ea2a6d48f63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TestCount: 100
   _unit: {fileID: 6788872394167532087, guid: 7adcf75d39b4a944bb0831447d91ae53, type: 3}
   _spawnPoint: {fileID: 7884132571467293054}
+--- !u!208 &2278767987646810436
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3810015783745908052}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.3680003, y: 3.3290002, z: 2.348}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.072000004, y: -0.039, z: 1.6150001}
+  m_TimeToStationary: 0.5

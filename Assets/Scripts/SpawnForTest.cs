@@ -1,30 +1,41 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class SpawnForTest : MonoBehaviour
 {
-    public int TestCount = 10;
-    [SerializeField] private Character _unit;
-    [SerializeField] private Transform _spawnPoint;
-    private float _value;
+   [SerializeField] private Character _crossbowman;
+   [SerializeField] private Character _halberdier;
+   [SerializeField] private Character _knight;
+   [SerializeField] private Character _soldier;
+   [SerializeField] private Character _swordsman;
 
-    private void Spawn()
-    {
-        Instantiate(_unit, _spawnPoint.position, Quaternion.identity);
-    }
+   [SerializeField] private Transform _spawnPos;
+   private AllYourUnits _allYourUnits;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-            StartCoroutine(SpawnCO());
-    }
+   private void Start()
+   {
+      _allYourUnits = FindObjectOfType<AllYourUnits>();
+   }
 
-    private IEnumerator SpawnCO()
-    {
-        for (var i = 0; i < 15; i++)
-        {
-            Spawn();
-            yield return new WaitForSeconds(0.1f);
-        }
-    }
+   public void AddSwordsman()
+   {
+      var unit = Instantiate(_swordsman, _spawnPos.position, Quaternion.identity);
+      _allYourUnits.AllCharacters.Add(unit);
+   }
+   
+   public void AddSoldier()
+   {
+      var unit = Instantiate(_soldier, _spawnPos.position, Quaternion.identity);
+      _allYourUnits.AllCharacters.Add(unit);
+   }
+   
+   public void AddKnight()
+   {
+      var unit = Instantiate(_knight, _spawnPos.position, Quaternion.identity);
+      _allYourUnits.AllCharacters.Add(unit);
+   }
+
+   
+   
 }

@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 4535038915432977133}
   - component: {fileID: 2614636663449288285}
   - component: {fileID: 8079175394856829216}
+  - component: {fileID: 7770216290973854789}
   m_Layer: 0
   m_Name: Stables
   m_TagString: Untagged
@@ -128,5 +129,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed7718ddbc8ded748ab93ea2a6d48f63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TestCount: 100
   _unit: {fileID: 7115063483450604267, guid: 5d5bfd1357cd30d4f960d1587ea1b3b4, type: 3}
   _spawnPoint: {fileID: 7232100440913249570}
+--- !u!208 &7770216290973854789
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7893855848800697808}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.357, y: 3.374, z: 2.687}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.061000004, y: -0.061000004, z: 1.9540001}
+  m_TimeToStationary: 0.5

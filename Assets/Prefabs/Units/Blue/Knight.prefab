@@ -816,7 +816,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 2.5, z: 2.5}
+  m_LocalScale: {x: 0.1, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6493671734031651834}
@@ -2008,6 +2008,7 @@ MonoBehaviour:
   _health: 700
   _moveSpeed: 5
   _attackRange: 3.75
+  _selected: {fileID: 2570513156143499892}
 --- !u!114 &4078232704097745597
 MonoBehaviour:
   m_ObjectHideFlags: 0
