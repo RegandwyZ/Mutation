@@ -1,103 +1,124 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Button = UnityEngine.UIElements.Button;
+
 
 public class InputSystem : MonoBehaviour
 {
     [SerializeField] private AllYourUnits _arrayOfAllYourUnits;
     [SerializeField] private Texture _boxSelect;
+    [SerializeField] private Button _stop;
+    
     private readonly List<Character> _selectedCharacters = new();
+    
     private BasicBuilding _selectedBuilding;
     private Vector3 _startPoint;
     private Vector3 _endPoint;
     private Rect s_rect;
-    
+    private Camera _mainCamera;
     private bool _selected;
     private bool _findUnit;
     private float _width;
     private float _height;
 
-    
+
+    private void Awake()
+    {
+        _mainCamera = Camera.main;
+        _stop.onClick.AddListener(StopSelectedUnits);
+    }
+
     private void Update()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+        
         if(Input.GetMouseButtonDown(0))
-        {
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out var hit))
-            {
-                var character = hit.collider.GetComponent<Character>();
-                if (character != null && character.GetColor == Players.Blue)
-                {
-                    if (_selectedBuilding != null)
-                    {
-                        BuildingDeselect();
-                    }
-                    _selectedCharacters.Add(character);
-                    character.SelectUnit();
-                    return;
-                }
-                
-                var building = hit.collider.GetComponent<BasicBuilding>();
-                if (building != null)
-                {
-                    if (building == _selectedBuilding)
-                    {
-                        BuildingDeselect();
-                        return;
-                    }
-                    _selectedBuilding = building;
-                    building.SelectUnit();
-                    return;
-                }
-            }
-            
-            _startPoint = Input.mousePosition;
-            foreach (var character in _selectedCharacters)
-            {
-                if (character != null)
-                {
-                    character.DeSelectUnit();
-                }
-            }
-            _selectedCharacters.Clear();
-            _selected = true;
-           
-        }
-        if(_selected)    
-        {
-            _endPoint = Input.mousePosition;
-            if(Input.GetMouseButtonUp(0))
-            {
-                s_rect = SelectRect(_startPoint, _endPoint);
-                _findUnit = true;
-                _selected = false;
-            }
-        }else if(_findUnit)
-        {
-            foreach(var tmp in _arrayOfAllYourUnits.AllCharacters)
-            {
-                var pos = Camera.main.WorldToScreenPoint(tmp.transform.position);
-                pos.y = InvertY(pos.y);
-                if (s_rect.Contains(pos))
-                {
-                    _selectedCharacters.Add(tmp);
-                    tmp.SelectUnit();
-                }
-            }
-            _findUnit = false;
-        }
-
+            HandleLeftClick();
+        
+        if (_selected)
+            SelectingRect();
+        
+        else if (_findUnit)
+            AddSelectedUnitInArray();
+        
         if (Input.GetMouseButtonDown(1))
-        {
             HandleRightClick();
+    }
+
+    private void SelectingRect()
+    {
+        _endPoint = Input.mousePosition;
+        if(Input.GetMouseButtonUp(0))
+        {
+            s_rect = SelectRect(_startPoint, _endPoint);
+            _findUnit = true;
+            _selected = false;
         }
     }
-    
+
+    private void AddSelectedUnitInArray()
+    {
+        foreach(var tmp in _arrayOfAllYourUnits.AllCharacters)
+        {
+            var pos = _mainCamera.WorldToScreenPoint(tmp.transform.position);
+            pos.y = InvertY(pos.y);
+            if (s_rect.Contains(pos))
+            {
+                _selectedCharacters.Add(tmp);
+                tmp.SelectUnit();
+            }
+        }
+        _findUnit = false;
+    }
+
+    private void HandleLeftClick()
+    {
+        var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out var hit))
+        {
+            var character = hit.collider.GetComponent<Character>();
+            if (character != null )//&& character.GetColor == Players.Blue)
+            {
+                if (_selectedBuilding != null)
+                {
+                    BuildingDeselect();
+                }
+                _selectedCharacters.Add(character);
+                character.SelectUnit();
+                return;
+            }
+                
+            var building = hit.collider.GetComponent<BasicBuilding>();
+            if (building != null)
+            {
+                if (building == _selectedBuilding)
+                {
+                    BuildingDeselect();
+                    return;
+                }
+                _selectedBuilding = building;
+                building.SelectBuilding();
+                return;
+            }
+        }
+            
+        _startPoint = Input.mousePosition;
+        foreach (var character in _selectedCharacters)
+        {
+            if (character != null)
+            {
+                character.DeSelectUnit();
+            }
+        }
+        _selectedCharacters.Clear();
+        _selected = true;
+    }
     private void HandleRightClick()
     {
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out var hit))
         {
             foreach (var character in _selectedCharacters)
@@ -149,7 +170,7 @@ public class InputSystem : MonoBehaviour
 
     private void BuildingDeselect()
     {
-        _selectedBuilding.DeSelectUnit();
+        _selectedBuilding.DeSelectBuilding();
         _selectedBuilding = null;
     }
     private float InvertY(float _y)
@@ -157,4 +178,14 @@ public class InputSystem : MonoBehaviour
         return Screen.height - _y;
     }
     
+    public void StopSelectedUnits()
+    {
+        foreach (var character in _selectedCharacters)
+        {
+            if (character != null)
+            {
+                character.Stop();
+            }
+        }
+    }
 }

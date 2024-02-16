@@ -14,7 +14,7 @@ namespace Unity.AI.Navigation.Samples
         NavMeshModifier m_NavMeshModifier;
         bool m_WasMoving;
 
-        void Start()
+        private void Start()
         {
             m_Rigidbody = GetComponent<Rigidbody>();
             m_NavMeshModifier = GetComponent<NavMeshModifier>();
@@ -22,9 +22,9 @@ namespace Unity.AI.Navigation.Samples
             m_WasMoving = !m_Rigidbody.IsSleeping();
         }
 
-        void Update()
+        private void Update()
         {
-            bool isMoving = !m_Rigidbody.IsSleeping() && m_Rigidbody.velocity.sqrMagnitude > 0.1f;
+            var isMoving = !m_Rigidbody.IsSleeping() && m_Rigidbody.velocity.sqrMagnitude > 0.1f;
 
             if ((m_WasMoving && !isMoving) || (!m_WasMoving && isMoving))
             {

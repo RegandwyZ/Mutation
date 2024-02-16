@@ -1046,8 +1046,8 @@ GameObject:
   - component: {fileID: 8723960189088883735}
   - component: {fileID: 555762964165792157}
   - component: {fileID: 2887934353738489690}
-  - component: {fileID: 2229992573468716008}
   - component: {fileID: 184012843160497460}
+  - component: {fileID: 3175181703353720623}
   m_Layer: 0
   m_Name: Barracks
   m_TagString: Untagged
@@ -1139,21 +1139,6 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0.012, y: 0.012, z: 1.9720001}
   m_TimeToStationary: 0.5
---- !u!114 &2229992573468716008
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7063448271581186892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9a4e30f333e03c43af96a6c1664bd1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _unit: {fileID: 7287285839792447332, guid: e457da4c9bf235242a313c0067247d21, type: 3}
-  _canvas: {fileID: 6805286288344914820}
-  _selected: {fileID: 264252229329662658}
 --- !u!65 &184012843160497460
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1175,6 +1160,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 6.6162887, y: 6.635686, z: 5.410195}
   m_Center: {x: 0.012111425, y: 0.011778593, z: 1.9719675}
+--- !u!114 &3175181703353720623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7063448271581186892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db93a61354f10a1438c46c7e4f29eabf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Size: {x: 2, y: 2}
 --- !u!1 &7888852615461255925
 GameObject:
   m_ObjectHideFlags: 0

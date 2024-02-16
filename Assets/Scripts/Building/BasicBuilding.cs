@@ -3,22 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicBuilding : MonoBehaviour
+public abstract class BasicBuilding : MonoBehaviour
 {
-
-    [SerializeField] private Character _unit;
     [SerializeField] private GameObject _canvas;
     [SerializeField] private Collider _selected;
+
+    [SerializeField] private int _Health;
+    [SerializeField] private int _armor;
+    
+    
     public bool IsSelected { get; private set; }
     
-    public void SelectUnit()
+    public void SelectBuilding()
     {
         IsSelected = true;
         ShowBuildingCanvas();
         _selected.gameObject.SetActive(true);
     }
     
-    public void DeSelectUnit()
+    public void DeSelectBuilding()
     {
         IsSelected = false;
         HideBuildingCanvas();

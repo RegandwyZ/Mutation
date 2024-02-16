@@ -1,59 +1,71 @@
+using System;
+using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
-
+using UnityEngine.UI;
 
 public abstract class Character : MonoBehaviour
 {
     [SerializeField] protected Collider _unitCollider;
-    [SerializeField] protected Collider _weaponCollider;
     [SerializeField] protected Players _playersColor;
+    [SerializeField] private Collider _selected;
     [SerializeField] protected float _health;
     [SerializeField] protected float _moveSpeed;
     [SerializeField] protected float _attackRange;
-    [SerializeField] private Collider _selected;
+    
+    [SerializeField] private Button _stopButton;
     
     protected NavMeshAgent Agent;
     protected Collider EnemyCollider;
     protected AnimationParameter AnimationPar;
+    private Canvas _canvas;
     
     private AreaOfEnemy _areaOfEnemy;
     private Animator _animator;
-    private AllYourUnits _arrayOfUnit;
+    protected AllYourUnits _arrayOfUnit;
     public Players GetColor => _playersColor;
 
     public bool IsSelected { get; private set; }
-    protected bool _canAttack;
+    private bool _canAttack;
     private bool _hasStopped;
 
     private void Awake()
     {
+        Agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
         AnimationPar = new AnimationParameter();
         AnimationPar.Init(_animator);
         _areaOfEnemy = GetComponent<AreaOfEnemy>();
-        Physics.IgnoreCollision(_weaponCollider, _unitCollider);
-        Agent = GetComponent<NavMeshAgent>();
         _arrayOfUnit = FindObjectOfType<AllYourUnits>();
+        _canvas = GetComponentInChildren<Canvas>();
+        _canvas.gameObject.SetActive(false);
     }
-    
+
+    private void Start()
+    {
+        _stopButton.onClick.AddListener(Stop);
+    }
+
     public void SelectUnit()
     {
         IsSelected = true;
         _selected.gameObject.SetActive(true);
+        _canvas.gameObject.SetActive(true);
     }
     
     public void DeSelectUnit()
     {
         IsSelected = false;
         _selected.gameObject.SetActive(false);
+        _canvas.gameObject.SetActive(false);
     }
     
-    private void DestroyGameObject()
+    protected void DestroyGameObject()
     {
         Destroy(gameObject);
     }
 
-    protected void UnitBehaviour()
+    protected virtual void UnitBehaviour()
     {
         if (Agent == null) return;
         if (_health <= 0)
@@ -63,8 +75,12 @@ public abstract class Character : MonoBehaviour
             AnimationPar.PlayAnimation(AnimationType.Die);
             return;
         }
-        if (Agent.remainingDistance < 1.5)
+
+        if (Agent.remainingDistance < 1.5 )
+        {
             Stop();
+        }
+          
         
         if (EnemyCollider && _canAttack )
         {
@@ -105,10 +121,11 @@ public abstract class Character : MonoBehaviour
         if (!Agent.enabled) return;
         if (Agent == null) return;
         Agent.isStopped = false;
+        Agent.speed = _moveSpeed;
         AnimationPar.PlayAnimation(AnimationType.Run);
         Agent.SetDestination(targetPos);
     }
-    protected void Attack(Collider targetPos)
+    public void Attack(Collider targetPos)
     {
         transform.LookAt(targetPos.transform);
         AnimationPar.PlayAnimation(AnimationType.Attack);
@@ -116,7 +133,7 @@ public abstract class Character : MonoBehaviour
         Agent.avoidancePriority = 1;
     }
     
-    protected void Stop()
+    public void Stop()
     {
         Agent.isStopped = true;
         AnimationPar.PlayAnimation(AnimationType.Idle);
