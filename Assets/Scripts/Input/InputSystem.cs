@@ -10,7 +10,10 @@ public class InputSystem : MonoBehaviour
     [SerializeField] private AllYourUnits _arrayOfAllYourUnits;
     [SerializeField] private Texture _boxSelect;
     [SerializeField] private Button _stop;
+    [SerializeField] private Button _build;
     
+    private OrderCanvas _orderCanvas;
+    private BuildCanvas _buildCanvas;
     private readonly List<Character> _selectedCharacters = new();
     
     private BasicBuilding _selectedBuilding;
@@ -28,6 +31,11 @@ public class InputSystem : MonoBehaviour
     {
         _mainCamera = Camera.main;
         _stop.onClick.AddListener(StopSelectedUnits);
+       
+        _orderCanvas = GetComponent<OrderCanvas>();
+        _buildCanvas = GetComponent<BuildCanvas>();
+        
+        _build.onClick.AddListener(_buildCanvas.ActiveBuildCanvas);
     }
 
     private void Update()
@@ -46,6 +54,7 @@ public class InputSystem : MonoBehaviour
         
         if (Input.GetMouseButtonDown(1))
             HandleRightClick();
+        
     }
 
     private void SelectingRect()
@@ -69,6 +78,7 @@ public class InputSystem : MonoBehaviour
             {
                 _selectedCharacters.Add(tmp);
                 tmp.SelectUnit();
+                _orderCanvas.ActiveOrderCanvas();
             }
         }
         _findUnit = false;
@@ -80,7 +90,7 @@ public class InputSystem : MonoBehaviour
         if (Physics.Raycast(ray, out var hit))
         {
             var character = hit.collider.GetComponent<Character>();
-            if (character != null )//&& character.GetColor == Players.Blue)
+            if (character != null )
             {
                 if (_selectedBuilding != null)
                 {
@@ -88,6 +98,7 @@ public class InputSystem : MonoBehaviour
                 }
                 _selectedCharacters.Add(character);
                 character.SelectUnit();
+                _orderCanvas.ActiveOrderCanvas();
                 return;
             }
                 
@@ -111,6 +122,8 @@ public class InputSystem : MonoBehaviour
             if (character != null)
             {
                 character.DeSelectUnit();
+                _orderCanvas.DeActiveOrderCanvas();
+                _buildCanvas.DeActiveBuildCanvas();
             }
         }
         _selectedCharacters.Clear();

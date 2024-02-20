@@ -13,12 +13,9 @@ public abstract class Character : MonoBehaviour
     [SerializeField] protected float _moveSpeed;
     [SerializeField] protected float _attackRange;
     
-    [SerializeField] private Button _stopButton;
-    
     protected NavMeshAgent Agent;
     protected Collider EnemyCollider;
     protected AnimationParameter AnimationPar;
-    private Canvas _canvas;
     
     private AreaOfEnemy _areaOfEnemy;
     private Animator _animator;
@@ -37,27 +34,20 @@ public abstract class Character : MonoBehaviour
         AnimationPar.Init(_animator);
         _areaOfEnemy = GetComponent<AreaOfEnemy>();
         _arrayOfUnit = FindObjectOfType<AllYourUnits>();
-        _canvas = GetComponentInChildren<Canvas>();
-        _canvas.gameObject.SetActive(false);
+       
     }
-
-    private void Start()
-    {
-        _stopButton.onClick.AddListener(Stop);
-    }
+    
 
     public void SelectUnit()
     {
         IsSelected = true;
         _selected.gameObject.SetActive(true);
-        _canvas.gameObject.SetActive(true);
     }
     
     public void DeSelectUnit()
     {
         IsSelected = false;
         _selected.gameObject.SetActive(false);
-        _canvas.gameObject.SetActive(false);
     }
     
     protected void DestroyGameObject()
