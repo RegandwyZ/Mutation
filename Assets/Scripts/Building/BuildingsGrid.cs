@@ -28,19 +28,6 @@ public class BuildingsGrid : MonoBehaviour
         _flyingBuildingRender = Instantiate(buildingRenderPrefab);
     }
     
-    // private void OnDrawGizmos()
-    // {
-    //     for (int x = 0; x < GridSize.x; x++)
-    //     {
-    //         for (int y = 0; y < GridSize.y; y++)
-    //         {
-    //             if ((x + y) % 2 == 0) Gizmos.color = new Color(0.88f, 0f, 1f, 0.3f);
-    //             else Gizmos.color = new Color(1f, 0.68f, 0f, 0.3f);
-    //
-    //             Gizmos.DrawCube(transform.position + new Vector3(x, 0, y), new Vector3(1, .1f, 1));
-    //         }
-    //     }
-    // }
     private void Update()
     {
         if (_flyingBuildingRender != null)
@@ -58,12 +45,12 @@ public class BuildingsGrid : MonoBehaviour
                 var available = !(x < 0 || x > GridSize.x - _flyingBuildingRender.Size.x);
 
                 if (y < 0 || y > GridSize.y - _flyingBuildingRender.Size.y) available = false;
-
                 if (available && IsPlaceTaken(x, y)) available = false;
+                if (available && IsSpaceOccupied(x, y, _flyingBuildingRender)) available = false;
 
                 _flyingBuildingRender.transform.position = new Vector3(x, 0, y);
                 _flyingBuildingRender.SetTransparent(available);
-
+                
                 if (available && Input.GetMouseButtonDown(0))
                 {
                     PlaceFlyingBuilding(x, y);
@@ -90,6 +77,18 @@ public class BuildingsGrid : MonoBehaviour
             }
         }
 
+        return false;
+    }
+
+    private bool IsSpaceOccupied(int placeX, int placeY, BuildingRender building)
+    {
+        var centerPoint = new Vector3(placeX + building.Size.x / 2.0f, 0, placeY + building.Size.y / 2.0f);
+        var hitColliders = Physics.OverlapBox(centerPoint, 
+            new Vector3(building.Size.x / 2.0f, 0.5f, building.Size.y / 2.0f), Quaternion.identity);
+
+        if (hitColliders.Length > 2)
+            return true;
+        
         return false;
     }
 

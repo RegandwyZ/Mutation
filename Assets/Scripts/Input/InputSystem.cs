@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -74,12 +75,10 @@ public class InputSystem : MonoBehaviour
         {
             var pos = _mainCamera.WorldToScreenPoint(tmp.transform.position);
             pos.y = InvertY(pos.y);
-            if (s_rect.Contains(pos))
-            {
-                _selectedCharacters.Add(tmp);
-                tmp.SelectUnit();
-                _orderCanvas.ActiveOrderCanvas();
-            }
+            if (!s_rect.Contains(pos)) continue;
+            _selectedCharacters.Add(tmp);
+            tmp.SelectUnit();
+            _orderCanvas.ActiveOrderCanvas();
         }
         _findUnit = false;
     }
@@ -90,44 +89,64 @@ public class InputSystem : MonoBehaviour
         if (Physics.Raycast(ray, out var hit))
         {
             var character = hit.collider.GetComponent<Character>();
-            if (character != null )
+            if (character == null) 
+            {
+                DeactivateCanvases();
+                foreach (var selectedCharacter in _selectedCharacters)
+                {
+                    selectedCharacter.DeSelectUnit(); 
+                }
+                _selectedCharacters.Clear(); 
+            }
+
+            if (character != null)
             {
                 if (_selectedBuilding != null)
                 {
-                    BuildingDeselect();
+                    _selectedBuilding.DeSelectBuilding();
+                    _selectedBuilding = null;
                 }
+
                 _selectedCharacters.Add(character);
                 character.SelectUnit();
                 _orderCanvas.ActiveOrderCanvas();
                 return;
             }
-                
+
             var building = hit.collider.GetComponent<BasicBuilding>();
             if (building != null)
             {
-                if (building == _selectedBuilding)
+                if (_selectedBuilding != null && _selectedBuilding != building)
                 {
-                    BuildingDeselect();
-                    return;
+                    DeactivateCanvases();
+                    _selectedBuilding.DeSelectBuilding();
                 }
                 _selectedBuilding = building;
                 building.SelectBuilding();
                 return;
             }
+
+            if (_selectedBuilding != null)
+            {
+                DeactivateCanvases();
+                _selectedBuilding.DeSelectBuilding();
+                _selectedBuilding = null;
+            }
+        }
+        else
+        {
+            DeactivateCanvases();
         }
             
         _startPoint = Input.mousePosition;
-        foreach (var character in _selectedCharacters)
-        {
-            if (character != null)
-            {
-                character.DeSelectUnit();
-                _orderCanvas.DeActiveOrderCanvas();
-                _buildCanvas.DeActiveBuildCanvas();
-            }
-        }
         _selectedCharacters.Clear();
         _selected = true;
+    }
+    
+    private void DeactivateCanvases()
+    {
+        _orderCanvas.DeActiveOrderCanvas();
+        _buildCanvas.DeActiveBuildCanvas();
     }
     private void HandleRightClick()
     {
@@ -146,12 +165,10 @@ public class InputSystem : MonoBehaviour
 
     private void OnGUI()
     {
-        if(_selected)
-        {
-            _width = _endPoint.x - _startPoint.x;
-            _height = InvertY(_endPoint.y) - InvertY(_startPoint.y);
-            GUI.DrawTexture(new Rect(_startPoint.x, InvertY(_startPoint.y), _width, _height), _boxSelect);
-        }
+        if (!_selected) return;
+        _width = _endPoint.x - _startPoint.x;
+        _height = InvertY(_endPoint.y) - InvertY(_startPoint.y);
+        GUI.DrawTexture(new Rect(_startPoint.x, InvertY(_startPoint.y), _width, _height), _boxSelect);
     }
 
     private Rect SelectRect(Vector3 _start, Vector3 _end)
@@ -171,34 +188,25 @@ public class InputSystem : MonoBehaviour
             _start.x = _end.x;
             _end.x = _start.z;
         }
-        if (_endPoint.y > _startPoint.y)
-        {
-            _start.z = _start.y;
-            _start.y = _end.y;
-            _end.y = _start.z;
-        }
+
+        if (!(_endPoint.y > _startPoint.y)) return new Rect(_start.x, InvertY(_start.y), _width, _height);
+        _start.z = _start.y;
+        _start.y = _end.y;
+        _end.y = _start.z;
 
         return new Rect(_start.x, InvertY(_start.y), _width, _height);
     }
-
-    private void BuildingDeselect()
-    {
-        _selectedBuilding.DeSelectBuilding();
-        _selectedBuilding = null;
-    }
+    
     private float InvertY(float _y)
     {
         return Screen.height - _y;
     }
-    
-    public void StopSelectedUnits()
+
+    private void StopSelectedUnits()
     {
-        foreach (var character in _selectedCharacters)
+        foreach (var character in _selectedCharacters.Where(character => character != null))
         {
-            if (character != null)
-            {
-                character.Stop();
-            }
+            character.Stop();
         }
     }
 }

@@ -1,28 +1,26 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BuildingRender : MonoBehaviour
 {
+    
     public Renderer MainRenderer;
     public Vector2Int Size = Vector2Int.one;
+    private StartBuildCarcass _startBuildCarcass;
+
+    private void Start()
+    {
+        _startBuildCarcass = GetComponent<StartBuildCarcass>();
+    }
 
     public void SetTransparent(bool available)
     {
-        if (available)
-        {
-            MainRenderer.material.color = Color.green;
-        }
-        else
-        {
-            MainRenderer.material.color = Color.red;
-        }
+        MainRenderer.material.color = available ? Color.green : Color.red;
     }
 
     public void SetNormal()
     {
         MainRenderer.material.color = Color.white;
+        _startBuildCarcass.StartBuild();
     }
 
     private void OnDrawGizmos()

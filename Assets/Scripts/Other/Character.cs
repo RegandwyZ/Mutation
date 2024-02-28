@@ -34,7 +34,6 @@ public abstract class Character : MonoBehaviour
         AnimationPar.Init(_animator);
         _areaOfEnemy = GetComponent<AreaOfEnemy>();
         _arrayOfUnit = FindObjectOfType<AllYourUnits>();
-       
     }
     
 

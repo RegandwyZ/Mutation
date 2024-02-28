@@ -1,4 +1,4 @@
-﻿ using System;
+﻿ using System.Collections.Generic;
  using UnityEngine;
  using UnityEngine.UI;
 
@@ -14,30 +14,28 @@
 
      [SerializeField] private BuildingPrefabs _prefabs;
      private BuildingsGrid _buildingsGrid;
+     
      private void Start()
      {
          _buildingsGrid = FindObjectOfType<BuildingsGrid>();
          
-         _townHall.onClick.AddListener(BuildTownHall);
-         _farm.onClick.AddListener(BuildFarm);
-         _house.onClick.AddListener(BuildHouse);
-         _barrack.onClick.AddListener(BuildBarrack);
+         var buttonToPrefabMap = new Dictionary<Button, BuildingRender>
+         {
+             {_townHall, _prefabs._townHall},
+             {_farm, _prefabs._farm},
+             {_house, _prefabs._house},
+             {_barrack, _prefabs._barrack},
+         };
+
+        
+         foreach (var pair in buttonToPrefabMap)
+         {
+             pair.Key.onClick.AddListener(() => BuildBuilding(pair.Value));
+         }
      }
 
-     private void BuildTownHall()
+     private void BuildBuilding(BuildingRender buildingPrefab)
      {
-         _buildingsGrid.StartPlacingBuilding(_prefabs._townHall);
-     }
-     private void BuildFarm()
-     {
-         _buildingsGrid.StartPlacingBuilding(_prefabs._farm);
-     }
-     private void BuildHouse()
-     {
-         _buildingsGrid.StartPlacingBuilding(_prefabs._house);
-     }
-     private void BuildBarrack()
-     {
-         _buildingsGrid.StartPlacingBuilding(_prefabs._barrack);
+         _buildingsGrid.StartPlacingBuilding(buildingPrefab);
      }
  }
