@@ -19,16 +19,16 @@
              return;
          }
 
-         if (Agent.remainingDistance < 1.5)
-         {
-             Stop();
-         }
+         // if (Agent.remainingDistance < 1.5)
+         // {
+         //     Stop();
+         // }
          
      }
 
-     public BasicBuilding Build()
+     public void Build()
      {
-         return null;
+         
      }
 
      public void ExtractResources()

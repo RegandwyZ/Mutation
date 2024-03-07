@@ -7,5 +7,6 @@
      public BuildingRender _farm;
      public BuildingRender _barrack; 
      public BuildingRender _house;
-     
+     public BuildingRender _TowerA;
+
  }

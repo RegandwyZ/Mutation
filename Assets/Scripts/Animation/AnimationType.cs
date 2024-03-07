@@ -1,7 +1,7 @@
 ﻿ public enum AnimationType
  {
     Idle,
-    Walk,
+   // Walk,
     Run,
     Attack,
     Die

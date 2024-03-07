@@ -197,7 +197,7 @@ public class InputSystem : MonoBehaviour
         return new Rect(_start.x, InvertY(_start.y), _width, _height);
     }
     
-    private float InvertY(float _y)
+    private static float InvertY(float _y)
     {
         return Screen.height - _y;
     }

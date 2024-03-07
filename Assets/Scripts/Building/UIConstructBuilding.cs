@@ -8,6 +8,7 @@
      [SerializeField] private Button _farm;
      [SerializeField] private Button _house;
      [SerializeField] private Button _barrack;
+     [SerializeField] private Button _towerA;
      [SerializeField] private Button _blackSmith;
      [SerializeField] private Button _stables;
      [SerializeField] private Button _archery;
@@ -25,6 +26,7 @@
              {_farm, _prefabs._farm},
              {_house, _prefabs._house},
              {_barrack, _prefabs._barrack},
+             {_towerA, _prefabs._TowerA},
          };
 
         

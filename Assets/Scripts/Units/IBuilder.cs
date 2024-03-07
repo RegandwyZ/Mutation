@@ -1,6 +1,6 @@
 ﻿ public interface IBuilder
  {
-     public BasicBuilding Build();
+     public void Build();
 
     
 

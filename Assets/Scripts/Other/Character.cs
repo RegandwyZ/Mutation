@@ -1,8 +1,5 @@
-using System;
-using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
 
 public abstract class Character : MonoBehaviour
 {
@@ -81,7 +78,7 @@ public abstract class Character : MonoBehaviour
             EnemyCollider = _areaOfEnemy.FindClosestEnemy();
             if (_canAttack)
             {
-                Stop();
+               // Stop();
                 _canAttack = false;
             }
            
@@ -98,7 +95,7 @@ public abstract class Character : MonoBehaviour
         }
         if (EnemyCollider == null && !_hasStopped)
         {
-            Stop();
+           // Stop();
             _hasStopped = true;
             _canAttack = false;
         }

@@ -1401,12 +1401,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitCollider: {fileID: 4647047389613807666}
-  _weaponCollider: {fileID: 9022309266117504679}
   _playersColor: 1
+  _selected: {fileID: 334120036781629360}
   _health: 200
   _moveSpeed: 3
   _attackRange: 11
-  _selected: {fileID: 334120036781629360}
   _bulletPrefab: {fileID: 1614823636802813595, guid: 9b2c52f101f37cd4fa975745e333bdc5, type: 3}
   _bulletSpawnPos: {fileID: 8842447081900882546}
 --- !u!114 &2439633039037087783
@@ -1421,7 +1420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a956191dc1f4b848862b4dd53fa979f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _setMaterial: {fileID: 2100000, guid: 3fb3053a2c6c4b346b51634e6d401ff2, type: 2}
+  _setMaterial: {fileID: 2100000, guid: 19f3b2158b0cd134798555d774de0b3f, type: 2}
 --- !u!1 &3471804658837626623
 GameObject:
   m_ObjectHideFlags: 0
@@ -3694,10 +3693,5 @@ PrefabInstance:
 --- !u!4 &1282729899650770084 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6546762016860287991, guid: e32e9acfcaca5574b9fb86f98c2f6d8e, type: 3}
-  m_PrefabInstance: {fileID: 5411050015983327059}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &9022309266117504679 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 3900758480422238708, guid: e32e9acfcaca5574b9fb86f98c2f6d8e, type: 3}
   m_PrefabInstance: {fileID: 5411050015983327059}
   m_PrefabAsset: {fileID: 0}

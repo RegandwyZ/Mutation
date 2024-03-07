@@ -22,15 +22,14 @@ public class BuildingRender : MonoBehaviour
         MainRenderer.material.color = Color.white;
         _startBuildCarcass.StartBuild();
     }
-
+    
     private void OnDrawGizmos()
     {
-        for (int x = 0; x < Size.x; x++)
+        for (var x = 0; x < Size.x; x++)
         {
-            for (int y = 0; y < Size.y; y++)
+            for (var y = 0; y < Size.y; y++)
             {
-                if ((x + y) % 2 == 0) Gizmos.color = new Color(0.88f, 0f, 1f, 0.3f);
-                else Gizmos.color = new Color(1f, 0.68f, 0f, 0.3f);
+                Gizmos.color = (x + y) % 2 == 0 ? new Color(1f, 0.07f, 0.05f, 0.3f) : new Color(0.03f, 0.1f, 1f, 0.3f);
 
                 Gizmos.DrawCube(transform.position + new Vector3(x, 0, y), new Vector3(1, .1f, 1));
             }

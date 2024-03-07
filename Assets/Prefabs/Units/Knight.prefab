@@ -2004,12 +2004,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitCollider: {fileID: 9079466785222219308}
-  _weaponCollider: {fileID: 3272019298168857534}
   _playersColor: 1
+  _selected: {fileID: 2570513156143499892}
   _health: 700
   _moveSpeed: 5
   _attackRange: 3.75
-  _selected: {fileID: 2570513156143499892}
+  _weaponCollider: {fileID: 3272019298168857534}
 --- !u!114 &4078232704097745597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2059,7 +2059,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a956191dc1f4b848862b4dd53fa979f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _setMaterial: {fileID: 2100000, guid: 3fb3053a2c6c4b346b51634e6d401ff2, type: 2}
+  _setMaterial: {fileID: 2100000, guid: 19f3b2158b0cd134798555d774de0b3f, type: 2}
 --- !u!1 &6455070164367313652
 GameObject:
   m_ObjectHideFlags: 0

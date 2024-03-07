@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    private readonly float _zoomSpeed = 15.0f;
-    private readonly float _movementSpeed = 15.0f;
+    private const float _zoomSpeed = 15.0f;
+    private const float _movementSpeed = 15.0f;
+
     private void Update()
     {
         var horizontalInput = Input.GetAxis("Horizontal");

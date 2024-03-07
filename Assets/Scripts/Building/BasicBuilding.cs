@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class BasicBuilding : MonoBehaviour
@@ -9,7 +6,6 @@ public abstract class BasicBuilding : MonoBehaviour
 
     [SerializeField] private int _Health;
     [SerializeField] private int _armor;
-    
     
     public bool IsSelected { get; private set; }
     
@@ -24,8 +20,4 @@ public abstract class BasicBuilding : MonoBehaviour
         IsSelected = false;
         _selected.gameObject.SetActive(false);
     }
-
-
-   
-    
 }

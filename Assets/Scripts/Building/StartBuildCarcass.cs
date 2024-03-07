@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using Unity.VisualScripting;
+﻿using System.Collections;
 using UnityEngine;
 
 public class StartBuildCarcass : MonoBehaviour
@@ -34,7 +32,6 @@ public class StartBuildCarcass : MonoBehaviour
         
         ReplaceBuilding(_fullProgressPrefab);
         Destroy(gameObject);
-        
     }
 
     private void ReplaceBuilding(BuildingRender newBuildingPrefab)
