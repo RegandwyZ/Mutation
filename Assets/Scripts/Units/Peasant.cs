@@ -8,23 +8,7 @@
      }
 
 
-     protected override void UnitBehaviour()
-     {
-         if (Agent == null) return;
-         if (_health <= 0)
-         {
-             _arrayOfUnit.RemoveCharacter(this);
-             DestroyGameObject();
-             AnimationPar.PlayAnimation(AnimationType.Die);
-             return;
-         }
-
-         // if (Agent.remainingDistance < 1.5)
-         // {
-         //     Stop();
-         // }
-         
-     }
+    
 
      public void Build()
      {

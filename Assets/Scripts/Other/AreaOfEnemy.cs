@@ -2,7 +2,7 @@
 
 public class AreaOfEnemy : MonoBehaviour
 {
-    private float _rangeArea = 100;
+    private const float _rangeArea = 10;
     [SerializeField] private LayerMask _detectionLayer;
 
     private Collider[] _result;

@@ -1,19 +1,19 @@
 ﻿using UnityEngine;
 
-public class AnimationParameter
+public static class AnimationParameter
 {
-    private Animator _animator;
+    private static Animator _animator;
 
-    private readonly int _isRun = Animator.StringToHash("IsRun");
-    private readonly int _isAttack = Animator.StringToHash("IsAttack");
-    private readonly int _isDead = Animator.StringToHash("IsDead");
+    private static readonly int _isRun = Animator.StringToHash("IsRun");
+    private static readonly int _isAttack = Animator.StringToHash("IsAttack");
+    private static readonly int _isDead = Animator.StringToHash("IsDead");
 
-    public void Init(Animator animator)
+    public static void Init(Animator animator)
     {
         _animator = animator;
     }
 
-    public void PlayAnimation(AnimationType animationType)
+    public static void PlayAnimation(AnimationType animationType)
     {
         switch (animationType)
         {

@@ -10,8 +10,8 @@ public abstract class RangeUnit : Character
     {
         var bullet = Instantiate(_bulletPrefab, _bulletSpawnPos.position, Quaternion.identity);
         bullet.Init(_playersColor);
-        if (EnemyCollider == null) return;
-        bullet.SetTarget(EnemyCollider);
+        if (_enemyCollider == null) return;
+        bullet.SetTarget(_enemyCollider);
         bullet.MoveArrow(transform);
     }
 

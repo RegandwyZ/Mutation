@@ -86,7 +86,6 @@ public class BuildingsGrid : MonoBehaviour
         var centerPoint = new Vector3(placeX + building.Size.x / 2.0f, 0, placeY + building.Size.y / 2.0f);
         var hitColliders = Physics.OverlapBox(centerPoint,
             new Vector3(building.Size.x / 2.0f, 0.5f, building.Size.y / 2.0f), Quaternion.identity);
-        Debug.Log(hitColliders.Length);
         return hitColliders.Length > 2;
     }
 

@@ -38,7 +38,7 @@ public class RangeWeapon : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         var sol = other.gameObject.GetComponent<Character>();
-        if (sol == null || _color == sol.GetColor) return;
+        if (sol == null || _color == sol.GetColor()) return;
         sol.TakeDamage(10);
         DestroyArrow();
     }

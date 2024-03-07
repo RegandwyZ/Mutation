@@ -4,162 +4,110 @@ using UnityEngine.AI;
 public abstract class Character : MonoBehaviour
 {
     [SerializeField] protected Collider _unitCollider;
-    [SerializeField] protected Players _playersColor;
     [SerializeField] private Collider _selected;
+
+    [SerializeField] protected Players _playersColor;
+
     [SerializeField] protected float _health;
-    [SerializeField] protected float _moveSpeed;
-    [SerializeField] protected float _attackRange;
-    
-    protected NavMeshAgent Agent;
-    protected Collider EnemyCollider;
-    protected AnimationParameter AnimationPar;
-    
-    private AreaOfEnemy _areaOfEnemy;
-    private Animator _animator;
-    protected AllYourUnits _arrayOfUnit;
-    public Players GetColor => _playersColor;
+    [SerializeField] public float _attackRange;
 
     public bool IsSelected { get; private set; }
-    private bool _canAttack;
+
+    private NavMeshAgent _agent;
+    protected Collider _enemyCollider;
+    private StateMachine _stateMachine;
+
+    private AreaOfEnemy _areaOfEnemy;
+    private Animator _animator;
+    private AllYourUnits _arrayOfUnit;
+
     private bool _hasStopped;
 
     private void Awake()
     {
-        Agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
-        AnimationPar = new AnimationParameter();
-        AnimationPar.Init(_animator);
+        _stateMachine = new StateMachine();
+        _stateMachine.Initialize(new IdleState(_animator));
+        _agent = GetComponent<NavMeshAgent>();
         _areaOfEnemy = GetComponent<AreaOfEnemy>();
-        _arrayOfUnit = FindObjectOfType<AllYourUnits>();
     }
-    
+
+    public Players GetColor()
+    {
+        return _playersColor;
+    }
 
     public void SelectUnit()
     {
         IsSelected = true;
         _selected.gameObject.SetActive(true);
     }
-    
+
     public void DeSelectUnit()
     {
         IsSelected = false;
         _selected.gameObject.SetActive(false);
     }
-    
-    protected void DestroyGameObject()
+
+    private void DestroyGameObject()
     {
         Destroy(gameObject);
     }
 
     protected virtual void UnitBehaviour()
     {
-        if (Agent == null) return;
+        if (_agent == null) return;
         if (_health <= 0)
         {
+            _arrayOfUnit = AllYourUnits.Instance;
             _arrayOfUnit.RemoveCharacter(this);
             DestroyGameObject();
-            AnimationPar.PlayAnimation(AnimationType.Die);
             return;
         }
 
-        if (Agent.remainingDistance < 1.5 )
+        if (!_agent.pathPending && _agent.remainingDistance < 2)
         {
             Stop();
         }
-          
-        
-        if (EnemyCollider && _canAttack )
+
+        if (_enemyCollider)
         {
-            Attack(EnemyCollider);
+            Attack(_enemyCollider);
+            _stateMachine._currentState.Update();
+            _hasStopped = false;
         }
         else
         {
             _areaOfEnemy.DetectEnemyInRadius();
-            EnemyCollider = _areaOfEnemy.FindClosestEnemy();
-            if (_canAttack)
-            {
-               // Stop();
-                _canAttack = false;
-            }
-           
+            _enemyCollider = _areaOfEnemy.FindClosestEnemy();
         }
 
-        if (EnemyCollider != null)
+        if (_enemyCollider == null && !_hasStopped)
         {
-            var range = CalculateEnemyPos(EnemyCollider, _attackRange);
-            if (_attackRange >= range)
-            {
-                _canAttack = true;
-            }
-            
-        }
-        if (EnemyCollider == null && !_hasStopped)
-        {
-           // Stop();
+            Stop();
+            _stateMachine.ChangeState(new IdleState(_animator));
             _hasStopped = true;
-            _canAttack = false;
         }
-    }
-
-
-    public void Move(Vector3 targetPos)
-    {
-        if (!Agent.enabled) return;
-        if (Agent == null) return;
-        Agent.isStopped = false;
-        Agent.speed = _moveSpeed;
-        AnimationPar.PlayAnimation(AnimationType.Run);
-        Agent.SetDestination(targetPos);
-    }
-    public void Attack(Collider targetPos)
-    {
-        transform.LookAt(targetPos.transform);
-        AnimationPar.PlayAnimation(AnimationType.Attack);
-        Agent.isStopped = true;
-        Agent.avoidancePriority = 1;
     }
     
+    public void Move(Vector3 targetPos)
+    {
+        _stateMachine.ChangeState(new RunState(_animator, _agent, targetPos));
+    }
+
+    private void Attack(Collider targetPos)
+    {
+        transform.LookAt(targetPos.transform);
+        _stateMachine.ChangeState(new AttackState(_animator, this, targetPos, _agent));
+    }
+
     public void Stop()
     {
-        Agent.isStopped = true;
-        AnimationPar.PlayAnimation(AnimationType.Idle);
-        Agent.avoidancePriority = 50;
+        _agent.isStopped = true;
+        _agent.avoidancePriority = 50;
+        _stateMachine.ChangeState(new IdleState(_animator));
     }
 
-    private float CalculateEnemyPos(Collider targetPos,  float attackRange)
-    {
-        EnemyCollider = targetPos;
-        var positionEnemy = targetPos.transform.position;
-        var distance = Vector3.Distance(transform.position, positionEnemy);
-
-        return distance;
-        
-        
-        // Move(positionEnemy - range);
-        // if (targetPos == null)
-        // {
-        // AnimationPar.PlayAnimation(AnimationType.Idle);
-        // Stop();
-        // }
-        // else
-        // {
-        //     if (distance < attackRange )
-        //     {
-        //         transform.LookAt(targetPos.transform);
-        //         AnimationPar.PlayAnimation(AnimationType.Attack);
-        //         Agent.isStopped = true;
-        //         Agent.avoidancePriority = 1;
-        //     }
-        //     else if (distance > attackRange )
-        //     {
-        //         Agent.enabled = true; 
-        //         Agent.isStopped = false;
-        //         Agent.avoidancePriority = 50;
-        //         AnimationPar.PlayAnimation(AnimationType.Run);
-        //         Move(targetPos.transform.position);
-        //     }
-        // }
-    }
 
     public void TakeDamage(float damage)
     {

@@ -2007,7 +2007,6 @@ MonoBehaviour:
   _playersColor: 1
   _selected: {fileID: 2570513156143499892}
   _health: 700
-  _moveSpeed: 5
   _attackRange: 3.75
   _weaponCollider: {fileID: 3272019298168857534}
 --- !u!114 &4078232704097745597
