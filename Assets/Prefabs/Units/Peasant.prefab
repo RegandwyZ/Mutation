@@ -260,6 +260,7 @@ GameObject:
   - component: {fileID: 6146963950883081865}
   - component: {fileID: 7763359971873706897}
   - component: {fileID: 6986876216509953810}
+  - component: {fileID: 6126302821466860653}
   m_Layer: 7
   m_Name: Peasant
   m_TagString: Untagged
@@ -332,10 +333,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitCollider: {fileID: 6986876216509953810}
-  _playersColor: 1
   _selected: {fileID: 7395678538069234119}
+  _playersColor: 1
   _health: 200
-  _moveSpeed: 3
   _attackRange: 2
 --- !u!195 &7763359971873706897
 NavMeshAgent:
@@ -380,6 +380,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7925101, y: 1.4946014, z: 0.5964737}
   m_Center: {x: -0.0061933696, y: 0.7987028, z: 0.019453049}
+--- !u!208 &6126302821466860653
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366031627600065147}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.5, y: 1, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1497232072546359012
 GameObject:
   m_ObjectHideFlags: 0

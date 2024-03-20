@@ -1,6 +1,10 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+
+[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(NavMeshObstacle))]
+[RequireComponent(typeof(Animator))]
 public abstract class Character : MonoBehaviour
 {
     [SerializeField] protected Collider _unitCollider;
@@ -14,7 +18,9 @@ public abstract class Character : MonoBehaviour
     public bool IsSelected { get; private set; }
 
     private NavMeshAgent _agent;
-    protected Collider _enemyCollider;
+    private NavMeshObstacle _agentObstacle;
+    
+    protected Character _enemy;
     private StateMachine _stateMachine;
 
     private AreaOfEnemy _areaOfEnemy;
@@ -22,6 +28,8 @@ public abstract class Character : MonoBehaviour
     private AllYourUnits _arrayOfUnit;
 
     private bool _hasStopped;
+    private bool _isAttack;
+
 
     private void Awake()
     {
@@ -30,6 +38,7 @@ public abstract class Character : MonoBehaviour
         _stateMachine.Initialize(new IdleState(_animator));
         _agent = GetComponent<NavMeshAgent>();
         _areaOfEnemy = GetComponent<AreaOfEnemy>();
+        _agentObstacle = GetComponent<NavMeshObstacle>();
     }
 
     public Players GetColor()
@@ -65,26 +74,35 @@ public abstract class Character : MonoBehaviour
             return;
         }
 
-        if (!_agent.pathPending && _agent.remainingDistance < 2)
-        {
-            Stop();
-        }
+        // if (!_agent.pathPending && _agent.remainingDistance < 2)
+        // {
+        //     Stop();
+        // }
 
-        if (_enemyCollider)
+        if (_enemy)
         {
-            Attack(_enemyCollider);
-            _stateMachine._currentState.Update();
-            _hasStopped = false;
+            var distance =  CalculateEnemyPos(_enemy);
+            if (distance < _attackRange&& !_isAttack)
+            {
+                _agent.isStopped = true;
+                Attack(_enemy);
+                _isAttack = true;
+            }
+            else if (distance > _attackRange && _isAttack )
+            {
+                _isAttack = false;
+                _stateMachine.ChangeState(new IdleState(_animator));
+            }
         }
         else
         {
             _areaOfEnemy.DetectEnemyInRadius();
-            _enemyCollider = _areaOfEnemy.FindClosestEnemy();
+            _enemy = _areaOfEnemy.FindClosestEnemy();
         }
-
-        if (_enemyCollider == null && !_hasStopped)
+        _enemy = _areaOfEnemy.FindClosestEnemy();
+        if (_enemy == null && !_hasStopped)
         {
-            Stop();
+            _stateMachine._currentState.Exit();
             _stateMachine.ChangeState(new IdleState(_animator));
             _hasStopped = true;
         }
@@ -92,13 +110,19 @@ public abstract class Character : MonoBehaviour
     
     public void Move(Vector3 targetPos)
     {
-        _stateMachine.ChangeState(new RunState(_animator, _agent, targetPos));
+        if (_agent.enabled)
+        {
+            _areaOfEnemy.DetectEnemyInRadius();
+            _agent.avoidancePriority = 60;
+            _stateMachine.ChangeState(new RunState(_animator, _agent, targetPos));
+        }
+       
     }
 
-    private void Attack(Collider targetPos)
+    private void Attack(Character targetPos)
     {
         transform.LookAt(targetPos.transform);
-        _stateMachine.ChangeState(new AttackState(_animator, this, targetPos, _agent));
+        _stateMachine.ChangeState(new AttackState(_animator, _agent, _agentObstacle, this));
     }
 
     public void Stop()
@@ -108,6 +132,13 @@ public abstract class Character : MonoBehaviour
         _stateMachine.ChangeState(new IdleState(_animator));
     }
 
+    private float CalculateEnemyPos(Character targetPos)
+    {
+        _enemy = targetPos;
+        var positionEnemy = targetPos.transform.position;
+        var distance = Vector3.Distance(transform.position, positionEnemy);
+        return distance;
+    }
 
     public void TakeDamage(float damage)
     {

@@ -1315,6 +1315,7 @@ GameObject:
   - component: {fileID: 3555310879725018617}
   - component: {fileID: 3262241763190861309}
   - component: {fileID: 4179076601232307259}
+  - component: {fileID: 627399380384840929}
   m_Layer: 7
   m_Name: Soldier
   m_TagString: Untagged
@@ -1396,10 +1397,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitCollider: {fileID: 3555310879725018617}
-  _playersColor: 1
   _selected: {fileID: 311647113822478251}
+  _playersColor: 1
   _health: 300
-  _moveSpeed: 3
   _attackRange: 2
   _weaponCollider: {fileID: 105078136608624602}
 --- !u!65 &3555310879725018617
@@ -1421,8 +1421,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1.7852736, z: 1}
-  m_Center: {x: 0, y: 0.9025471, z: 0}
+  m_Size: {x: 0.5726735, y: 1.7852736, z: 0.5727164}
+  m_Center: {x: -0.03812501, y: 0.9025471, z: 0.029248387}
 --- !u!114 &3262241763190861309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1451,6 +1451,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _setMaterial: {fileID: 2100000, guid: 19f3b2158b0cd134798555d774de0b3f, type: 2}
+--- !u!208 &627399380384840929
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7849313054735000374}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.17, y: 1, z: 0.17}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &8336856258870248834
 GameObject:
   m_ObjectHideFlags: 0

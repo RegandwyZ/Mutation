@@ -1402,6 +1402,7 @@ GameObject:
   - component: {fileID: 3648943145712823820}
   - component: {fileID: 7287285839792447332}
   - component: {fileID: -3522876708125085771}
+  - component: {fileID: 1233990152640420503}
   m_Layer: 7
   m_Name: Swordman
   m_TagString: Untagged
@@ -1516,8 +1517,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1.7970937, z: 1}
-  m_Center: {x: 0, y: 0.9000992, z: 0}
+  m_Size: {x: 0.6405109, y: 1.7970937, z: 0.6179865}
+  m_Center: {x: -0.010010183, y: 0.9000992, z: -0.009732872}
 --- !u!114 &3648943145712823820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1546,10 +1547,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitCollider: {fileID: 4507165986578996358}
-  _playersColor: 1
   _selected: {fileID: 177451863123501542}
+  _playersColor: 1
   _health: 500
-  _moveSpeed: 2
   _attackRange: 2
   _weaponCollider: {fileID: 5815564932228711937}
 --- !u!114 &-3522876708125085771
@@ -1565,6 +1565,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _setMaterial: {fileID: 2100000, guid: 19f3b2158b0cd134798555d774de0b3f, type: 2}
+--- !u!208 &1233990152640420503
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8867721219170963633}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.18, y: 1, z: 0.18}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &9164063817943016515
 GameObject:
   m_ObjectHideFlags: 0

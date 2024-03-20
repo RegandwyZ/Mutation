@@ -73,12 +73,16 @@ public class InputSystem : MonoBehaviour
     {
         foreach(var tmp in _arrayOfAllYourUnits.AllCharacters)
         {
-            var pos = _mainCamera.WorldToScreenPoint(tmp.transform.position);
-            pos.y = InvertY(pos.y);
-            if (!s_rect.Contains(pos)) continue;
-            _selectedCharacters.Add(tmp);
-            tmp.SelectUnit();
-            _orderCanvas.ActiveOrderCanvas();
+            if (tmp.GetColor() == Players.Blue)
+            {
+                var pos = _mainCamera.WorldToScreenPoint(tmp.transform.position);
+                pos.y = InvertY(pos.y);
+                if (!s_rect.Contains(pos)) continue;
+                _selectedCharacters.Add(tmp);
+                tmp.SelectUnit();
+                _orderCanvas.ActiveOrderCanvas();
+            }
+           
         }
         _findUnit = false;
     }
@@ -107,10 +111,14 @@ public class InputSystem : MonoBehaviour
                     _selectedBuilding = null;
                 }
 
-                _selectedCharacters.Add(character);
-                character.SelectUnit();
-                _orderCanvas.ActiveOrderCanvas();
-                return;
+                if (character.GetColor() == Players.Blue)
+                {
+                    _selectedCharacters.Add(character);
+                    character.SelectUnit();
+                    _orderCanvas.ActiveOrderCanvas();
+                    return;
+                }
+              
             }
 
             var building = hit.collider.GetComponent<BasicBuilding>();
@@ -174,14 +182,11 @@ public class InputSystem : MonoBehaviour
     private Rect SelectRect(Vector3 _start, Vector3 _end)
     {
         if (_width < 0.0f)
-        {
             _width = Mathf.Abs(_width);
-        }
+        
         if (_height < 0.0f)
-        {
             _height = Mathf.Abs(_height);
-        }
-
+        
         if (_endPoint.x < _startPoint.x)
         {
             _start.z = _start.x;

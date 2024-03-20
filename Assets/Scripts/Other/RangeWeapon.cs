@@ -5,7 +5,7 @@ public class RangeWeapon : MonoBehaviour
     [SerializeField] private float _speed;
 
     private Rigidbody _rigidbody;
-    private Collider _target;
+    private Character _target;
     private Players _color;
 
     public void Init(Players playerColor)
@@ -14,7 +14,7 @@ public class RangeWeapon : MonoBehaviour
         _color = playerColor;
     }
 
-    public void SetTarget(Collider newTarget)
+    public void SetTarget(Character newTarget)
     {
         _target = newTarget;
         transform.LookAt(_target.transform);
@@ -33,7 +33,10 @@ public class RangeWeapon : MonoBehaviour
         _rigidbody.AddForce(direction * _speed, ForceMode.Impulse);
     }
 
-    private void DestroyArrow() => Destroy(gameObject);
+    private void DestroyArrow()
+    {
+        ArrowPool.SharedInstance.ReturnArrowToPool(gameObject);
+    }
 
     private void OnTriggerEnter(Collider other)
     {

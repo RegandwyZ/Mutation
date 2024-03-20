@@ -1923,6 +1923,7 @@ GameObject:
   - component: {fileID: 4078232704097745597}
   - component: {fileID: 684828890068302324}
   - component: {fileID: 4557325299777259657}
+  - component: {fileID: 2241520981022938902}
   m_Layer: 7
   m_Name: Knight
   m_TagString: Untagged
@@ -1989,8 +1990,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 2.5181856, z: 2.1606526}
-  m_Center: {x: 0, y: 1.3109016, z: 0.14482903}
+  m_Size: {x: 1, y: 2.5181856, z: 1.2205997}
+  m_Center: {x: 0, y: 1.3109016, z: 0.009407669}
 --- !u!114 &7115063483450604267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2004,9 +2005,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitCollider: {fileID: 9079466785222219308}
-  _playersColor: 1
   _selected: {fileID: 2570513156143499892}
-  _health: 700
+  _playersColor: 1
+  _health: 500
   _attackRange: 3.75
   _weaponCollider: {fileID: 3272019298168857534}
 --- !u!114 &4078232704097745597
@@ -2059,6 +2060,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _setMaterial: {fileID: 2100000, guid: 19f3b2158b0cd134798555d774de0b3f, type: 2}
+--- !u!208 &2241520981022938902
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6356259314817059162}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.5, y: 1, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &6455070164367313652
 GameObject:
   m_ObjectHideFlags: 0

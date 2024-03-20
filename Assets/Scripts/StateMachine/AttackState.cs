@@ -1,56 +1,52 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.AI;
 
 public class AttackState : State
 {
-    public AttackState(Animator animator, Character character, Collider enemy, NavMeshAgent agent)
+    private readonly Animator _animator;
+    
+    private readonly NavMeshAgent _agent;
+    private readonly NavMeshObstacle _obstacle;
+    private readonly Character _character;
+
+
+    public AttackState(Animator animator, NavMeshAgent agent, NavMeshObstacle obstacle, Character character)
     {
         _animator = animator;
-        _character = character;
-        _enemy = enemy;
+        _obstacle = obstacle;
         _agent = agent;
+        _character = character;
     }
-    
-    private readonly Animator _animator;
-    private readonly Character _character;
-    private Collider _enemy;
-    private readonly NavMeshAgent _agent;
 
     public override void Enter()
     {
         AnimationParameter.Init(_animator);
+        AnimationParameter.PlayAnimation(AnimationType.Attack);
+        _agent.enabled = false;
+        _obstacle.enabled = true;
     }
 
     public override void Update()
     {
-        if (_enemy != null)
-        {
-            var range = CalculateEnemyPos(_enemy, _character._attackRange);
-
-            if (_character._attackRange >= range)
-            {
-                AnimationParameter.PlayAnimation(AnimationType.Attack);
-                _agent.isStopped = true;
-                _agent.avoidancePriority = 1;
-            }
-            else
-            {
-                _character.Move(_enemy.transform.position);
-                AnimationParameter.PlayAnimation(AnimationType.Run);
-            }
-        }
+       
     }
 
-    private float CalculateEnemyPos(Collider targetPos, float attackRange)
-    {
-        _enemy = targetPos;
-        var positionEnemy = targetPos.transform.position;
-        var distance = Vector3.Distance(_character.transform.position, positionEnemy);
-
-        return distance;
-    }
+   
+    
 
     public override void Exit()
     {
+        AnimationParameter.PlayAnimation(AnimationType.Idle);
+        _character.StartCoroutine(DelayedEnableAgent());
+
+    }
+    
+    private IEnumerator DelayedEnableAgent()
+    {
+        _obstacle.enabled = false;
+        yield return new WaitForSeconds(0.01f); 
+        _agent.enabled = true;
+        AnimationParameter.PlayAnimation(AnimationType.Idle);
     }
 }
